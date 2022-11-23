@@ -2,35 +2,37 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from './users-roles.enum';
 
+import { User } from './entities/user.entity';
+
+import { randomBytes } from 'crypto';
+import { Prisma } from '@prisma/client';
+
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createUserDto: CreateUserDto, role: UserRole): Promise<User> {
-    const { salt, password } = createUserDto;
-
-    const data: Prisma.UserCreateInput = {
-      ...createUserDto,
-      password: await this.hashPassword(password, salt),
-      role: role,
-      salt: await bcrypt.genSalt(),
-    };
-
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const saltHash = await bcrypt.genSalt();
     try {
-      const createdUser = await this.prisma.user.create({ data });
+      const data: Prisma.UserCreateInput = {
+        ...createUserDto,
+        password: await this.hashPassword(createUserDto.password, saltHash),
+        confirmationToken: randomBytes(32).toString('hex'),
+        role: UserRole.ADMIN,
+        salt: saltHash,
+      };
 
-      delete createdUser.password;
-      delete createdUser.salt;
-      return createdUser;
+      return await this.prisma.user.create({ data });
     } catch (error) {
-      if (error.code.toString() === '23505') {
+      if (error.code.toString() === 'P2002') {
         throw new ConflictException('Endereço de email já está em uso');
       } else {
         throw new InternalServerErrorException(

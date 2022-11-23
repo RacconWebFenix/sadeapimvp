@@ -3,6 +3,7 @@ import {
   IsDate,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
@@ -27,20 +28,26 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   role: string;
-  @IsNotEmpty()
-  @IsBoolean()
-  status: boolean;
-  @IsNotEmpty()
-  @IsString()
+  // @IsNotEmpty()
+  // @IsString()
+  @IsOptional()
   salt: string;
-  @IsNotEmpty()
-  @IsString()
+  // @IsNotEmpty()
+  // @IsBoolean()
+  @IsOptional()
+  status: boolean;
+  // @IsNotEmpty()
+  // @IsString()
+  @IsOptional()
   confirmationToken: string;
-  @IsNotEmpty()
-  @IsString()
+  // @IsNotEmpty()
+  // @IsString()
+  @IsOptional()
   recoverToken: string;
-  @IsDate()
-  createdAt: Date;
-  @IsDate()
-  updatedAt: Date;
+  // @IsDate()
+  // @IsOptional()
+  // createdAt: Date;
+  // @IsDate()
+  // @IsOptional()
+  // updatedAt: Date;
 }

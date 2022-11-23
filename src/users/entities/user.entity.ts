@@ -4,10 +4,10 @@ export class User {
   email: string;
   password: string;
   role: string;
-  status: boolean;
-  salt: string;
-  confirmationToken: string;
-  recoverToken: string;
-  createdAt: Date;
-  updatedAt: Date;
+  status?: boolean;
+  salt?: string;
+  confirmationToken?: string;
+  recoverToken?: string;
+  // createdAt?: Date;
+  // updatedAt?: Date;
 }

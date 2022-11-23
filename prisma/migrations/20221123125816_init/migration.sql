@@ -9,13 +9,14 @@ CREATE TABLE [dbo].[users] (
     [email] NVARCHAR(1000) NOT NULL,
     [password] NVARCHAR(1000) NOT NULL,
     [role] NVARCHAR(1000) NOT NULL,
-    [status] BIT NOT NULL,
-    [salt] NVARCHAR(1000) NOT NULL,
-    [confirmationToken] NVARCHAR(1000) NOT NULL,
-    [recoverToken] NVARCHAR(1000) NOT NULL,
-    [createdAt] DATETIME2 NOT NULL,
-    [updatedAt] DATETIME2 NOT NULL,
-    CONSTRAINT [users_pkey] PRIMARY KEY CLUSTERED ([id])
+    [status] BIT NOT NULL CONSTRAINT [users_status_df] DEFAULT 1,
+    [salt] NVARCHAR(1000),
+    [confirmationToken] NVARCHAR(1000),
+    [recoverToken] NVARCHAR(1000),
+    [createdAt] DATETIME2,
+    [updatedAt] DATETIME2,
+    CONSTRAINT [users_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [users_email_key] UNIQUE NONCLUSTERED ([email])
 );
 
 COMMIT TRAN;
