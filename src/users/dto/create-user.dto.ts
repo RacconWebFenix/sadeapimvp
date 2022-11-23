@@ -25,8 +25,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-  @IsNotEmpty()
-  @IsString()
+  @IsOptional()
   role: string;
   // @IsNotEmpty()
   // @IsString()
@@ -44,10 +43,10 @@ export class CreateUserDto {
   // @IsString()
   @IsOptional()
   recoverToken: string;
-  // @IsDate()
-  // @IsOptional()
-  // createdAt: Date;
-  // @IsDate()
-  // @IsOptional()
-  // updatedAt: Date;
+  @IsDate()
+  @IsOptional()
+  createdAt: Date;
+  @IsDate()
+  @IsOptional()
+  updatedAt: Date;
 }

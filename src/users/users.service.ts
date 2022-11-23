@@ -28,10 +28,14 @@ export class UsersService {
         confirmationToken: randomBytes(32).toString('hex'),
         role: UserRole.ADMIN,
         salt: saltHash,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       return await this.prisma.user.create({ data });
+      
     } catch (error) {
+      console.log(error);
       if (error.code.toString() === 'P2002') {
         throw new ConflictException('Endereço de email já está em uso');
       } else {
